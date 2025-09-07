@@ -1,0 +1,219 @@
+// question 1
+#include <bits/stdc++.h>
+using namespace std;
+class stk{
+    public:
+    int top =-1;
+    int st[10];
+    int push(int x){
+        top++;
+        if(top>=10){
+            cout<<"empty";
+            return -1;
+        }
+        else {
+            st[top]=x;
+        }
+        return st[top];
+    }
+    int  pop(){
+        if(top==-1){
+            return -1;
+        }
+       int el=st[top];
+       top--;
+       return el;
+    }
+    bool is_empty(){
+        if(top==-1){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    bool is_full(){
+        if(top>=10){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    void  disp(){
+        cout<<"stack from top to bottom :\n";
+        for(int i=top-1;i>=0;i--){
+            cout<<st[i];
+            cout<<", ";
+        }
+    }
+    int peek(){
+        if(top==-1){
+            return -1;
+        }
+        return st[top];
+    }
+};
+int main(){
+  stk st;
+  cout<<st.push(1);
+  cout<<"\n";
+  cout<<st.push(2);
+  st.pop();
+  cout<<"\n";
+  st.push(3);
+  st.push(4);
+  cout<<"\n";
+  st.disp();
+}
+// question 2
+#include<bits/stdc++.h>
+using namespace std;
+void f (string & s){
+    stack<int> st;
+    int n=s.size();
+    for(int i=0;i<n;i++){
+        st.push(s[i]);
+    }
+    for(int i=0;i<n;i++){
+        s[i]=st.top();
+        st.pop();
+    }
+}
+int main(){
+    string s="sat yam";
+    cout<<"before reverse:";
+    cout<<s<<endl;
+    f(s);
+   cout<<"after revrse:";
+   cout<<s;
+}
+// question 3 
+// Input: "(]" → Output: false
+//Input: "([)]" → Output: false
+//Input: "{[]}" → Output: true
+# include<bits/stdc++.h>
+using namespace std;
+ bool f(string s){
+     stack<int> st;
+     for(int i=0;i<s.size();i++){
+         char c=s[i];
+         if(c=='('|| c=='[' || c=='{'){
+             st.push(c);
+         }
+         else{
+             if(c==')' && st.top()=='('){
+                 st.pop();
+             }
+             else if(c=='}' && st.top()=='{'){
+                 st.pop();
+             }
+             else if(c==']' && st.top()=='['){
+                 st.pop();
+             }
+             else {
+                 return false;
+             }
+         }
+     }
+     return true;
+ }
+int main(){
+    cout<<"enter the string";
+    string s;
+    cin>>s;
+    cout<<f(s);
+}
+// question 4 
+#include<bits/stdc++.h>
+using namespace std;
+//Function to return precedence of operators
+int prec(char c) {
+  if (c == '^')
+    return 3;
+  else if (c == '/' || c == '*')
+    return 2;
+  else if (c == '+' || c == '-')
+    return 1;
+  else
+    return -1;
+}
+// The main function to convert infix expression
+//to postfix expression
+void infixToPostfix(string s) {
+  stack < char > st; //For stack operations, we are using C++ built in stack
+  string result;
+  for (int i = 0; i < s.length(); i++) {
+    char c = s[i];
+    // If the scanned character is
+    // an operand, add it to output string.
+    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'))
+      result += c;
+    // If the scanned character is an
+    // ‘(‘, push it to the stack.
+    else if (c == '(')
+      st.push('(');
+    // If the scanned character is an ‘)’,
+    // pop and to output string from the stack
+    // until an ‘(‘ is encountered.
+    else if (c == ')') {
+      while (st.top() != '(') {
+        result += st.top();
+        st.pop();
+      }
+      st.pop();
+    }
+    //If an operator is scanned
+    else {
+      while (!st.empty() && prec(s[i]) <= prec(st.top())) {
+        result += st.top();
+        st.pop();
+      }
+      st.push(c);
+    }
+  }
+  // Pop all the remaining elements from the stack
+  while (!st.empty()) {
+    result += st.top();
+    st.pop();
+  }
+  cout << "Prefix expression: " << result << endl;
+}
+int main() {
+  string exp = "A+(B*C-(D/E^F)*G)*H";
+  cout << "Infix expression: " << exp << endl;
+  infixToPostfix(exp);
+  return 0;
+}
+// question 5
+#include<bits/stdc++.h>
+using namespace std;
+int f(string s){
+    stack<int> st;
+    for(int i=0;i<s.size();i++){
+        char c=s[i];
+        if(c>='0' && c<='9'){
+            st.push(c-'0');
+        }
+        else {
+            int val2=st.top();
+            st.pop();
+            int val1=st.top();
+            st.pop();
+            switch(c){
+                case '+': st.push(val1 + val2); break;
+                case '-': st.push(val1 - val2); break;
+                case '*': st.push(val1 * val2); break;
+                case '/': st.push(val1 / val2); break;
+                case '^': st.push(pow(val1, val2)); break;
+            }
+        }
+    }
+    return st.top();
+}
+int main(){
+    string s;
+    cout<<"enter the postfix";
+    cin>>s;
+    cout<<f(s);
+}
